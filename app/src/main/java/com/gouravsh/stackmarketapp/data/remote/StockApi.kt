@@ -1,5 +1,6 @@
 package com.gouravsh.stackmarketapp.data.remote
 
+import com.gouravsh.stackmarketapp.BuildConfig
 import com.gouravsh.stackmarketapp.data.remote.dto.CompanyInfoDto
 import okhttp3.ResponseBody
 import retrofit2.http.GET
@@ -12,7 +13,7 @@ interface StockApi {
         @Query("apikey") apiKey: String = API_KEY
     ): ResponseBody
 
-    @GET("query?function=TIME_SERIES_INTRADAY&=IBM&interval=60min&datatype=csv")
+    @GET("query?function=TIME_SERIES_INTRADAY&interval=60min&datatype=csv")
     suspend fun getIntradayInfo(
         @Query("apikey") apiKey: String = API_KEY,
         @Query("symbol") symbol: String
@@ -25,7 +26,7 @@ interface StockApi {
     ): CompanyInfoDto
 
     companion object {
-        const val API_KEY = "LM2X9ID68WOAVEX8"
+        const val API_KEY = BuildConfig.STOCK_APIKEY
         const val BASE_URL = "https://alphavantage.co"
     }
 }

@@ -23,12 +23,13 @@ import javax.inject.Singleton
 
 @Singleton
 class StockRepositoryImpl @Inject constructor(
-    val api: StockApi,
-    val db: StockDatabase,
-    val companyListingParser: CSVParser<CompanyListing>,
-    val intradayParser: CSVParser<IntradayInfo>,
+    private val api: StockApi,
+    private val db: StockDatabase,
+    private val companyListingParser: CSVParser<CompanyListing>,
+    private val intradayParser: CSVParser<IntradayInfo>,
 ) : StockRepository {
     private val dao = db.dao;
+
     override suspend fun getCompanyListing(
         fetchFromRemote: Boolean,
         query: String,
@@ -41,14 +42,13 @@ class StockRepositoryImpl @Inject constructor(
             val isDbEmpty = localList.isEmpty() && query.isBlank()
             val shouldJustLoadFromCache = !isDbEmpty && !fetchFromRemote
             if (shouldJustLoadFromCache) {
-                emit(Resource.Loading(false))
+                emit(Resource.Loading(false, ))
                 return@flow
             }
             val remoteListing = try {
                 val response = api.getListings()
                 val res = response.byteStream();
                 Log.d("companyList", res.toString())
-
                 val companyList = companyListingParser.parse(response.byteStream())
                 Log.d("response",response.toString())
                 companyList
@@ -99,8 +99,15 @@ class StockRepositoryImpl @Inject constructor(
     override suspend fun getCompanyInfo(symbol: String): Flow<Resource<CompanyInfo>> {
        return flow{
             try{
+
                emit(Resource.Loading(true))
                 val response = api.getCompanyInfo( symbol)
+                if(response.errorInformation != null){
+
+                      emit(Resource.Error(response.errorInformation));
+                    return@flow;
+
+                }
                 emit(Resource.Success(response.toCompanyInfo()))
             }catch (e : IOException){
                 e.printStackTrace()

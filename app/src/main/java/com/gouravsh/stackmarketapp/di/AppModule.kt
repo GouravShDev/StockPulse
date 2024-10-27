@@ -25,14 +25,13 @@ object AppModule {
         val logging = HttpLoggingInterceptor()
 
 
-// set your desired log level
+        // set your desired log level
         logging.setLevel(HttpLoggingInterceptor.Level.BODY)
 
         val httpClient:  okhttp3.OkHttpClient =  okhttp3.OkHttpClient().newBuilder().addInterceptor(
             logging
         ).build();
         return Retrofit.Builder()
-
             .baseUrl(StockApi.BASE_URL)
             .client(httpClient)
             .addConverterFactory(MoshiConverterFactory.create())

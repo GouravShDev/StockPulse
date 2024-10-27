@@ -2,6 +2,7 @@ package com.gouravsh.stackmarketapp.presentation.company_info
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,29 +20,29 @@ class CompanyInfoViewModel @Inject constructor(
     private val repository: StockRepository
 ) : ViewModel() {
 
-    val state by mutableStateOf(CompanyInfoState())
+    var state by mutableStateOf(CompanyInfoState())
 
     init {
         viewModelScope.launch {
             val symbol: String = savedStateHandle.get<String>("symbol") ?: return@launch
-            state.copy(isLoading = true)
-            val companyInfo = async{ repository.getCompanyInfo(symbol) };
-            val intraday = async{  repository.getIntradayInfo(symbol) };
+            state = state.copy(isLoading = true)
+            val companyInfo = async { repository.getCompanyInfo(symbol) };
+            val intraday = async { repository.getIntradayInfo(symbol) };
 
             companyInfo.await().collect { res ->
-                when (res) {
+                state = when (res) {
                     is Resource.Error -> state.copy(isLoading = false, error = res.message)
                     is Resource.Loading -> state.copy(isLoading = true)
                     is Resource.Success -> state.copy(isLoading = false, company = res.data)
                 }
             }
-            intraday.await().collect{
-                res ->
-                when(res){
+            intraday.await().collect { res ->
+                state = when (res) {
                     is Resource.Error -> state.copy(isLoading = false, error = res.message)
                     is Resource.Loading -> state.copy(isLoading = true)
-                    is Resource.Success -> state.copy(isLoading = false, stockInfo = res.data ?: emptyList()
-)
+                    is Resource.Success -> state.copy(
+                        isLoading = false, stockInfo = res.data ?: emptyList()
+                    )
                 }
             }
 

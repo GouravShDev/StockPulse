@@ -10,16 +10,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavGraph
-import com.gouravsh.stackmarketapp.presentation.company_listings.CompanyListingScreen
-import com.gouravsh.stackmarketapp.presentation.company_listings.NavGraphs
-//import com.gouravsh.stackmarketapp.presentation.company_listings.NavGraphs
+import com.gouravsh.stackmarketapp.presentation.NavGraphs
 import com.gouravsh.stackmarketapp.ui.theme.StackMarketAppTheme
 import com.ramcosta.composedestinations.DestinationsNavHost
-import com.ramcosta.composedestinations.spec.NavGraphSpec
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
