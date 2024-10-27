@@ -1,6 +1,13 @@
 # 📈 **StockPulse**  
 A modern Stock Market app built with **Jetpack Compose**, following clean architecture principles and best coding practices for maintainability, scalability, and performance.
 
+## 📱 **Screenshots**
+
+| Home Screen                  | Company Details                  |
+|------------------------------|----------------------------------|
+| ![Home Screen](screenshots/Home_page.png) | ![Company Details](screenshots/CompanyDetail.png) |
+
+
 ## 🚀 **Features**
 
 - **Historical Data**: View historical stock data with interactive charts.
